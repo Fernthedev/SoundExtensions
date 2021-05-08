@@ -1,0 +1,13 @@
+﻿{
+  "$schema": "https://raw.githubusercontent.com/bsmg/BSIPA-MetadataFileSchema/master/Schema.json",
+  "id": "SoundExtensions",
+  "name": "SoundExtensions",
+  "author": "nyamimi~",
+  "version": "1.0.0",
+  "description": "Allows beatmaps to add hitsounds to bloqs!",
+  "gameVersion": "1.15.0",
+  "dependsOn": {
+    "BSIPA": "^4.1.6"
+  },
+  "features": []
+}

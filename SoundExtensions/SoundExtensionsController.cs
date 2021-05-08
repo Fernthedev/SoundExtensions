@@ -56,16 +56,24 @@ namespace SoundExtensions
 
                     try
                     {
+                        List<Task> tasks = new List<>();
                         foreach (var sound in sounds.Cast<string>())
                         {
                             try
                             {
                                 var soundPath = Path.Combine(customPreviewBeatmapLevel.customLevelPath, sound);
-                                var audioClip = await _cachedMediaAsyncLoader.LoadAudioClipAsync(soundPath, CancellationToken.None);
+                                // Is this the best way to do this?
+                                var audioClipTask = Task.Run(async () =>
+                                {
+                                    var audioClip = await _cachedMediaAsyncLoader.LoadAudioClipAsync(soundPath, CancellationToken.None);
 
-                                Sounds.Add(i, audioClip);
+                                    Sounds.Add(i, audioClip);
 
-                                Plugin.Log?.Debug($"{name}: Loaded sound \"{sound}\" {Path.Combine(customPreviewBeatmapLevel.customLevelPath, sound)}");
+                                    Plugin.Log?.Debug($"{name}: Loaded sound \"{sound}\" {Path.Combine(customPreviewBeatmapLevel.customLevelPath, sound)}");
+                                });
+
+                                tasks.Add(audioClipTask);
+
                             }
                             catch (Exception e)
                             {
@@ -74,6 +82,8 @@ namespace SoundExtensions
 
                             i++;
                         }
+
+                        Task.WaitAll(tasks.ToArray());
                     }
                     catch (Exception e)
                     {
